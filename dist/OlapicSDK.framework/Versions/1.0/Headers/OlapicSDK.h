@@ -28,6 +28,10 @@
 //  THE SOFTWARE.
 
 #import "OlapicRestClient.h"
+#import "OlapicBulkRequest.h"
+#import "OlapicOAuthMethod.h"
+#import "OlapicOAuthForSecretKey.h"
+#import "OlapicOAuthForAccount.h"
 
 #pragma mark - Include Media Lists
 
@@ -36,15 +40,22 @@
 #import "OlapicStreamMediaList.h"
 #import "OlapicCategoryMediaList.h"
 #import "OlapicUploaderMediaList.h"
+#import "OlapicCurationMediaList.h"
 
 #pragma mark - Include entities files
 
 #import "OlapicCustomerEntity.h"
 #import "OlapicMediaEntity.h"
+#import "OlapicCurationMediaEntity.h"
 #import "OlapicUploaderEntity.h"
 #import "OlapicStreamEntity.h"
+#import "OlapicCurationStreamEntity.h"
 #import "OlapicCategoryEntity.h"
 #import "OlapicWidgetInstanceEntity.h"
+#import "OlapicMediaStatus.h"
+
+#pragma mark - Include curation entities files
+#import "OlapicCurationStreamEntity.h"
 
 #pragma mark - Include handlers files
 
@@ -54,6 +65,7 @@
 #import "OlapicStreamHandler.h"
 #import "OlapicCategoryHandler.h"
 #import "OlapicWidgetInstanceHandler.h"
+#import "OlapicMediaStatusHandler.h"
 /**
  *  The different type of endpoints where the SDK can connect
  */
@@ -112,6 +124,7 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  @since  v1.0
  */
 +(instancetype)sharedOlapicSDK;
+
 /**-----------------------------------------------------------------------------
  * @name Connection
  * -----------------------------------------------------------------------------
@@ -119,16 +132,16 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
 /**
  *  Create the initial connection between the application and the API
  *
- *  @param auth    The authorization key for the API
- *  @param success A callback block for when the application successfully connects
- *  @param failure A callback block for when the connection fails
- *  @since v1.0
+ *  @param method     The selected OAuth connection method
+ *  @param success    A callback block for when the application successfully connects
+ *  @param failure    A callback block for when the connection fails
  */
--(void)connectWithCustomerAuthKey:(NSString *)auth onSuccess:(void (^)(OlapicCustomerEntity *customer))success onFailure:(void (^)(NSError *error))failure;
+-(void)connectWithOAuthMethod:(OlapicOAuthMethod*)method onSuccess:(void (^)(OlapicCustomerEntity *customer))success onFailure:(void (^)(NSError *error))failure;
+
 /**
  *  Create the initial connection between the application and the API
  *
- *  @param auth       The authorization key for the API
+ *  @param method     The selected OAuth connection method
  *  @param success    A callback block for when the application successfully connects
  *  @param failure    A callback block for when the connection fails
  *  @param endpoint   Each one of this endpoint will have different responses.
@@ -154,22 +167,22 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  - delegate: The pointer
  *  - widget_instance: The widget instance hash
  *
- *  @since            v1.0
+ *  @since v1.0
  */
--(void)connectWithCustomerAuthKey:(NSString *)auth onSuccess:(void (^)(NSDictionary *response))success onFailure:(void (^)(NSError *error))failure toEndpoint:(OlapicEndpointType)endpoint withParameters:(NSDictionary *)parameters;
+-(void)connectWithOAuthMethod:(OlapicOAuthMethod*)method onSuccess:(void (^)(NSDictionary *response))success onFailure:(void (^)(NSError *error))failure toEndpoint:(OlapicEndpointType)endpoint withParameters:(NSDictionary *)parameters;
+/**
+ *  Reset the SDK in order to connect with another
+ *  customer credentials
+ *
+ *  @since v1.0
+ */
+-(void)logout;
 
 #pragma mark - Core customization
 /**-----------------------------------------------------------------------------
- * @name Customization
+ * @name URLs
  * -----------------------------------------------------------------------------
  */
-/**
- *  Change the initial endpoint for the API
- *
- *  @param url The new URL
- *  @since v1.0
- */
--(void)setBaseURL:(NSString *)url;
 /**
  *  Get the current endpoint for the API
  *
@@ -177,10 +190,26 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  @since  v1.0
  */
 -(NSString *)getBaseURL;
+/**
+ *  Get the current endpoint for the curation
+ *  methods of the API
+ *
+ *  @return The URL
+ *  @since  v1.0
+ */
+-(NSString *)getCurationURL;
+/**
+ *  Get the current endpoint for bulk
+ *  requests
+ *
+ *  @return The URL
+ *  @since  v1.0
+ */
+-(NSString *)getBulkURL;
 
-#pragma mark - Rest
+#pragma mark - Rest and OAuth
 /**-----------------------------------------------------------------------------
- * @name REST
+ * @name REST and OAuth
  * -----------------------------------------------------------------------------
  */
 /**
@@ -190,6 +219,20 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  @since  v1.0
  */
 -(OlapicRestClient *)rest;
+/**
+ *  Set the OAuth connection method for the SDK
+ *
+ *  @param method A subclass of OlapicOAuthMethod
+ *  @since v1.0
+ */
+-(void)setOAuthConnectionMethod:(OlapicOAuthMethod *)method;
+/**
+ *  Get the current OAuth connection method
+ *
+ *  @return A subclass of OlapicOAuthMethod
+ */
+-(OlapicOAuthMethod *)getOAuth;
+
 #pragma mark - Customer
 /**-----------------------------------------------------------------------------
  * @name Customer
@@ -255,6 +298,15 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  @since  v1.0
  */
 -(OlapicWidgetInstanceHandler *)widgetInstances;
+
+/**
+ *  Get access to the curation statuses handler
+ *
+ *  @return The statuses handler
+ *  @since  v1.0
+ */
+-(OlapicMediaStatusHandler *)statuses;
+
 #pragma mark - Others
 /**-----------------------------------------------------------------------------
  * @name Utils
@@ -271,6 +323,29 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  */
 -(NSString *)prepareURLWithType:(NSString *)type context:(NSDictionary *)context;
 /**
+ *  Prepare a specific URL for curation
+ *
+ *  @param type    The URL type
+ *  @param context The information to be used to build the URL
+ *
+ *  @return A URL ready to be used with the API
+ *  @since  v1.0
+ */
+-(NSString *)prepareCurationURLWithType:(NSString *)type context:(NSDictionary *)context;
+/**
+ *  Prepare a specific URL for curation and set if
+ *  it should return the base domain or just the
+ *  relative path
+ *
+ *  @param type    The URL type
+ *  @param context The information to be used to build the URL
+ *  @param domain  If the URL should include the domain or just the relative path
+ *
+ *  @return A URL ready to be used with the API
+ *  @since  v1.0
+ */
+-(NSString *)prepareCurationURLWithType:(NSString *)type context:(NSDictionary *)context withDomain:(BOOL)domain;
+/**
  *  Check if the initial connection was made
  *
  *  @return That
@@ -285,6 +360,63 @@ typedef NS_ENUM(NSInteger, OlapicEndpointType){
  *  @since  v1.0
  */
 -(NSDictionary *)getDisconnectedError;
+/**
+ *  Get a reference to the shared instance
+ *  of the application
+ *
+ *  @return The app instance
+ *  @since  v1.0
+ */
+-(UIApplication *)getApp;
+/**-----------------------------------------------------------------------------
+ * @name Social
+ * -----------------------------------------------------------------------------
+ */
+/**
+ *  Check if the Twitter app is installed
+ *
+ *  @return If the app is installed
+ *  @since  v1.0
+ */
+-(BOOL)hasTwitterApp;
+/**
+ *  Check if the Instagram app is installed
+ *
+ *  @return If the app is installed
+ *  @since  v1.0
+ */
+-(BOOL)hasInstagramApp;
+/**
+ *  Check if the Facebook app is installed
+ *
+ *  @return If the app is installed
+ *  @since  v1.0
+ */
+-(BOOL)hasFacebookApp;
+/**
+ *  Get the popup view for sharing a
+ *  media on Instagram
+ *
+ *  @param media The media to share
+ *  @param image The media image
+ *
+ *  @return The sharing view
+ *  @since  v1.0
+ */
+-(UIDocumentInteractionController *)getInstagramShareViewForMedia:(OlapicMediaEntity *)media withImage:(UIImageView *)image;
+/**
+ *  Get the popup view for sharing a
+ *  media on Instagram with a default
+ *  caption
+ *
+ *  @param media   The media to share
+ *  @param image   The media image
+ *  @param caption The default caption
+ *
+ *  @return The sharing view
+ *  @since  v1.0
+ */
+-(UIDocumentInteractionController *)getInstagramShareViewForMedia:(OlapicMediaEntity *)media withImage:(UIImageView *)image andCaption:(NSString *)caption;
 /**-----------------------------------------------------------------------------
  * @name Log
  * -----------------------------------------------------------------------------

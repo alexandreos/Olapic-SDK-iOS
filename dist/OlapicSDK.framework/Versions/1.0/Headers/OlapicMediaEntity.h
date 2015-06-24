@@ -125,6 +125,6 @@
  *  @param failure A callback block for when the SDK can't get the streams
  *  @since v1.0
  */
--(void)getRelatedStreams:(void(^)(NSArray *streams))success onFailure:(void (^)(NSError *error))failure;
+-(void)getRelatedStreams:(void(^)(NSDictionary *streams))success onFailure:(void (^)(NSError *error))failure;
 
 @end

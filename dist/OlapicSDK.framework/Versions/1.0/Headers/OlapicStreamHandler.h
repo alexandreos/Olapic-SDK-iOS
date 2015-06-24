@@ -123,5 +123,26 @@
  *  @since v1.0
  */
 -(void)getStreamFromURL:(NSString *)URL onSuccess:(void (^)(OlapicStreamEntity *stream))success onFailure:(void (^)(NSError *error))failure parameters:(NSDictionary *)parameters;
+/**
+ *  Get Streams entities for curation
+ *
+ *  Example:
+ *
+ *  ```
+ *  [[[OlapicSDK sharedOlapicSDK] streams] searchStreamsForCuration:@"olapic"
+ *                                         onSuccess:^(NSDictionary *streams) {
+ *                                               NSLog(@"%@", streams);
+ *                                         }
+ *                                         onFailure:^(NSError *error) {
+ *                                               NSLog(@"Error: %@",error.description);
+ *                                         }];
+ *  ```
+ *
+ *
+ *  @param query   Any string that matches the name, the product_url or the product_identifier of the stream
+ *  @param success A callback block for when the streams are successfully retrieved
+ *  @param failure A callback block for when the SDK can't get the streams
+ */
+-(void)searchStreamsForCuration:(NSString *)query onSuccess:(void (^)(NSDictionary *streams))success onFailure:(void (^)(NSError *error))failure;
 
 @end

@@ -289,7 +289,49 @@
                         parameters:(id)parameters
                            success:(void (^)(OlapicAFHTTPRequestOperation *operation, id responseObject))success
                            failure:(void (^)(OlapicAFHTTPRequestOperation *operation, NSError *error))failure;
-
+/**
+ Creates and runs an `OlapicAFHTTPRequestOperation` with a `LINK` request.
+ 
+ @param URLString The URL string used to create the request URL.
+ @param parameters The parameters to be encoded according to the client request serializer.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the request operation, and the response object created by the client response serializer.
+ @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the request operation and the error describing the network or parsing error that occurred.
+ 
+ @see -HTTPRequestOperationWithRequest:success:failure:
+ */
+- (OlapicAFHTTPRequestOperation *)LINK:(NSString *)URLString
+                              parameters:(id)parameters
+                                 success:(void (^)(OlapicAFHTTPRequestOperation *operation, id responseObject))success
+                                 failure:(void (^)(OlapicAFHTTPRequestOperation *operation, NSError *error))failure;
+/**
+ Creates and runs an `OlapicAFHTTPRequestOperation` with a `UNLINK` request.
+ 
+ @param URLString The URL string used to create the request URL.
+ @param parameters The parameters to be encoded according to the client request serializer.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the request operation, and the response object created by the client response serializer.
+ @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the request operation and the error describing the network or parsing error that occurred.
+ 
+ @see -HTTPRequestOperationWithRequest:success:failure:
+ */
+- (OlapicAFHTTPRequestOperation *)UNLINK:(NSString *)URLString
+                            parameters:(id)parameters
+                               success:(void (^)(OlapicAFHTTPRequestOperation *operation, id responseObject))success
+                               failure:(void (^)(OlapicAFHTTPRequestOperation *operation, NSError *error))failure;
+/**
+ Creates and runs an `OlapicAFHTTPRequestOperation` with a custome method.
+ 
+ @param URLString The URL string used to create the request URL.
+ @param parameters The parameters to be encoded according to the client request serializer.
+ @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the request operation, and the response object created by the client response serializer.
+ @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the request operation and the error describing the network or parsing error that occurred.
+ 
+ @see -HTTPRequestOperationWithRequest:success:failure:
+ */
+- (OlapicAFHTTPRequestOperation *)simpleRequest:(NSString *)URLString
+                                         method:(NSString *)method
+                                     parameters:(id)parameters
+                                        success:(void (^)(OlapicAFHTTPRequestOperation *operation, id responseObject))success
+                                        failure:(void (^)(OlapicAFHTTPRequestOperation *operation, NSError *error))failure;
 /**
  Prepare the URL with any extra modifications it may need.
  
@@ -298,4 +340,3 @@
 -(NSString *)prepareURL:(NSString *)URLString;
 
 @end
-

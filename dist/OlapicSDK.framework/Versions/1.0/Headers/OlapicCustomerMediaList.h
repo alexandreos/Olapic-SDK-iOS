@@ -31,7 +31,7 @@
 
 @class OlapicCustomerEntity;
 /**
- *  List all the media objects from an specific customer
+ *  List all the media objects from a specific customer
  */
 @interface OlapicCustomerMediaList : OlapicMediaList{
     /**

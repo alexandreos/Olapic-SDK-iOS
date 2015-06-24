@@ -58,6 +58,9 @@ typedef NS_ENUM(NSInteger,OlapicMediaImageSize){
 };
 
 @class OlapicMediaEntity;
+@class OlapicCurationMediaEntity;
+@class OlapicCurationStreamEntity;
+@class OlapicMediaStatus;
 /**
  *  The object in charge of the media's common functionalities
  */
@@ -235,6 +238,64 @@ typedef NS_ENUM(NSInteger,OlapicMediaImageSize){
  *
  *  @since v1.0
  */
--(void)getRelatedStreamsFromMedia:(OlapicMediaEntity *)media onSuccess:(void(^)(NSArray *streams))success onFailure:(void (^)(NSError *error))failure;
-
+-(void)getRelatedStreamsFromMedia:(OlapicMediaEntity *)media onSuccess:(void(^)(NSDictionary *streams))success onFailure:(void (^)(NSError *error))failure;
+/**-----------------------------------------------------------------------------
+ * @name Source Types
+ * -----------------------------------------------------------------------------
+ */
+/**
+ *  Get a list of availables source types
+ *
+ *  Example:
+ *
+ *  ```
+ *  [[[OlapicSDK sharedOlapicSDK] getSourceTypes:^(NSArray *response) {
+ *  								  NSLog(@"%@", response);
+ *  							  } onFailure:^(NSError *error) {
+ *  								  NSLog(@"%@", error);
+ *  							  }];
+ *  ```
+ *
+ *  @param success A callback block for when the source types are successfully retrieved
+ *  @param failure A callback block for when the SDK can't get the source types
+ */
+-(void)getCurationSourceTypes:(void (^)(NSArray *response))success onFailure:(void (^)(NSError *error))failure;
+/**-----------------------------------------------------------------------------
+ * @name Link/Unlink Media to Streams
+ * -----------------------------------------------------------------------------
+ */
+/**
+ *  Link a media object to a list of streams
+ *
+ *  @param media   The media object
+ *  @param streams The streams to link
+ *  @param success A callback block for when the connection is successfully done. The result is a list with the requested links, its information and if the operations were completed
+ *  @param failure A callback block in case the operation fails
+ *  @since v1.0
+ */
+-(void)linkMedia:(OlapicCurationMediaEntity *)media toStreams:(NSArray *)streams onSuccess:(void (^)(NSArray *result))success onFailure:(void (^)(NSError *error))failure;
+/**
+ *  Unlink a media object from a list of streams
+ *
+ *  @param media   The media object
+ *  @param streams The streams to unlink
+ *  @param success A callback block for when the connection is successfully done. The result is a list with the requested unlinks, its information and if the operations were completed
+ *  @param failure A callback block in case the operation fails
+ *  @since v1.0
+ */
+-(void)unlinkMedia:(OlapicCurationMediaEntity *)media toStreams:(NSArray *)streams onSuccess:(void (^)(NSArray *result))success onFailure:(void (^)(NSError *error))failure;
+/**-----------------------------------------------------------------------------
+ * @name Statuses
+ * -----------------------------------------------------------------------------
+ */
+/**
+ *  Add or change the status of a list of media objects
+ *
+ *  @param status  The new status
+ *  @param media   The list of media
+ *  @param success A callback block for when the status is successfully changed
+ *  @param failure A callback block in case the operation fails
+ *  @since v1.0
+ */
+-(void)setStatus:(OlapicMediaStatus *)status forMedia:(NSArray *)media  onSuccess:(void (^)(NSArray *result))success onFailure:(void (^)(NSError *error))failure;
 @end

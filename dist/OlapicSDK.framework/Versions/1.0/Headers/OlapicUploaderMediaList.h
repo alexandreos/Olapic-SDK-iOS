@@ -52,7 +52,7 @@
  *  @param delegateObject The reference to the delegate object
  *
  *  @return The OlapicUploaderMediaList instance
- *  @since v1.0
+ *  @since  v1.0
  */
 -(id)initForUploader:(OlapicUploaderEntity *)uploader delegate:(id <OlapicMediaListDelegate>__weak)delegateObject;
 /**
@@ -65,7 +65,7 @@
  *  @param perPage        The number of media per page
  *
  *  @return The OlapicUploaderMediaList instance
- *  @since v1.0
+ *  @since  v1.0
  */
 -(id)initForUploader:(OlapicUploaderEntity *)uploader delegate:(id <OlapicMediaListDelegate>__weak)delegateObject mediaPerPage:(NSInteger)perPage;
 
@@ -80,7 +80,7 @@
  *  @param offset         The offset to change the page
  *
  *  @return The OlapicUploaderMediaList instance
- *  @since v1.0
+ *  @since  v1.0
  */
 -(id)initForUploader:(OlapicUploaderEntity *)uploader delegate:(id <OlapicMediaListDelegate>__weak)delegateObject mediaPerPage:(NSInteger)perPage offset:(NSInteger)offset;
 

@@ -1,24 +1,24 @@
 //
-//  OlapicHandler.h
+//  OlapicBulkRequest.h
 //  OlapicSDKFramework
 //  https://github.com/Olapic/Olapic-SDK-iOS
 //
-//  Created by The Olapic Team on 4/17/14.
+//  Created by The Olapic Team on 7/8/14.
 //  Copyright (c) 2014 Olapic, Inc. All rights reserved.
 //  https://olapic.com
 //
 //  The MIT License (MIT)
-//  
+//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
 //  the Software without restriction, including without limitation the rights to
 //  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 //  the Software, and to permit persons to whom the Software is furnished to do so,
 //  subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,72 +30,74 @@
 #import <Foundation/Foundation.h>
 
 @class OlapicSDK;
-@class OlapicBulkRequest;
 /**
- *  The base interface for the handler objects
+ *  Create and process bulk requests to the API
  */
-@interface OlapicHandler : NSObject
+@interface OlapicBulkRequest : NSObject
 /**-----------------------------------------------------------------------------
- * @name Create Entities
+ * @name Add URLs
  * -----------------------------------------------------------------------------
  */
 /**
- *  Create entity from an API JSON response
+ *  Add a URL to the batch
  *
- *  @param  JSON The JSON dictionary
- *
- *  @return An entity object
- *  @since  v1.0
+ *  @param URL The URL to be added
+ *  @since v1.0
  */
--(id)createEntityFromJSON:(NSDictionary *)JSON;
+-(void)addRequestToURL:(NSString *)URL;
+/**
+ *  Add a URL with extra query string
+ *  parameters to the batch
+ *
+ *  @param URL        The URL to be added
+ *  @param parameters The extra parameters
+ *  @since v1.0
+ */
+-(void)addRequestToURL:(NSString *)URL withParameters:(NSDictionary *)parameters;
+/**
+ *  Add a URL to the batch, with extra
+ *  query string parameters and extra
+ *  request headers
+ *
+ *  @param URL        The URL to be added
+ *  @param parameters The extra parameters
+ *  @param headers    The extra request headers
+ *  @since v1.0
+ */
+-(void)addRequestToURL:(NSString *)URL withParameters:(NSDictionary *)parameters requestHeaders:(NSDictionary *)headers;
+/**
+ *  Add a URL to the batch, with extra
+ *  request headers and extra parameters
+ *  for the query string or the body, depending
+ *  on the selected method (@"POST" or @"GET")
+ *
+ *  @param URL        The URL to be added
+ *  @param parameters The extra parameters
+ *  @param headers    The extra request headers
+ *  @param method     The request method (@"POST" or @"GET")
+ */
+-(void)addRequestToURL:(NSString *)URL withParameters:(NSDictionary *)parameters requestHeaders:(NSDictionary *)headers andMethod:(NSString *)method;
 /**-----------------------------------------------------------------------------
- * @name Entities Customization
+ * @name Sending the requests
  * -----------------------------------------------------------------------------
  */
 /**
- *  Get embedded resource URLs from a JSON API response
+ *  Start processing the batch with all
+ *  the requests
  *
- *  @param  embedded The API JSON response
- *
- *  @return A dictionary with the resource's URLs
- *  @since  v1.0
+ *  @param success A callback block for when the requests are done
+ *  @param failure A callback block for when the connection to the bulk server fails
  */
--(NSDictionary *)getResources:(NSDictionary *)embedded;
-/**
- *  Get embedded forms URLs from an API JSON response
- *
- *  @param  forms The form's information from the API
- *
- *  @return A dictionary with the form's URLs
- *  @since  v1.0
- */
--(NSDictionary *)getForms:(NSDictionary *)forms;
+-(void)process:(void (^)(NSArray *responseObject))success onFailure:(void (^)(NSError *error))failure;
 /**-----------------------------------------------------------------------------
  * @name Utils
  * -----------------------------------------------------------------------------
  */
 /**
- *  Extract entities from API response
- *
- *  @param  request The request information
- *
- *  @return A dictionary with the entities
- *  @since  v1.0
- */
--(NSDictionary *)extractEntitiesFromRequest:(NSDictionary *)request;
-/**
  *  Get the OlapicSDK reference
  *
- *  @return A reference to the SDK singleton
+ *  @return The OlapicSDK
  *  @since  v1.0
  */
 -(OlapicSDK *)getSDK;
-/**
- *  Get an instance of the object for bulk requests
- *
- *  @return A OlapicBulkRequest instance
- *  @since  v1.0
- */
--(OlapicBulkRequest *)getBulkRequest;
-
 @end

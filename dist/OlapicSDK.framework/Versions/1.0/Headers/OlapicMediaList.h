@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger, OlapicMediaListSortingType){
      */
     NSString *initialURL;
     /**
-     *  The API URL of the last request. This may change depending on the pagination.
+     *  The API URL of the last request. This may change depending on the pagination
      */
     NSMutableString *currentURL;
     /**
@@ -94,6 +94,10 @@ typedef NS_ENUM(NSInteger, OlapicMediaListSortingType){
      *  - media: An array with all the media objects for that page
      */
     NSMutableArray *pages;
+    /**
+     *  Lists specific parameters to be included on every requrest
+     */
+    NSMutableDictionary *extraParameters;
 }
 
 /**
@@ -105,7 +109,7 @@ typedef NS_ENUM(NSInteger, OlapicMediaListSortingType){
  */
 @property (nonatomic,strong) NSString *initialURL;
 /**
- *  The API URL of the last request This may change depending on the pagination
+ *  The API URL of the last request. This may change depending on the pagination
  */
 @property (nonatomic,strong) NSMutableString *currentURL;
 /**
@@ -135,6 +139,10 @@ typedef NS_ENUM(NSInteger, OlapicMediaListSortingType){
  *  - media: An array with all the media objects for that page
  */
 @property (nonatomic,strong) NSMutableArray *pages;
+/**
+ *  Lists specific parameters to be included on every requrest
+ */
+@property (nonatomic,strong) NSMutableDictionary *extraParameters;
 /**-----------------------------------------------------------------------------
  * @name Utils
  * -----------------------------------------------------------------------------
@@ -172,7 +180,7 @@ typedef NS_ENUM(NSInteger, OlapicMediaListSortingType){
  *
  *  @param data The received information
  *
- *  @return An OlapicMediaList subclass instance
+ *  @return An OlapicMediaList subclass instance (in this base class, it will return nil)
  */
 -(id)initFromConnectionData:(NSDictionary *)data;
 /**-----------------------------------------------------------------------------
