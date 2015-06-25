@@ -211,7 +211,7 @@
 -(void)handleSwipeRight:(UIScreenEdgePanGestureRecognizer*)gesture{
     if(uploaderViewOpen) return;
     CGPoint translation = [gesture translationInView:self.view];
-    CGFloat xValue = abs(translation.x);
+    CGFloat xValue = fabs(translation.x);
     CGFloat width = self.view.frame.size.width;
     CGFloat newX = round(width - xValue);
     if(gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateEnded){
