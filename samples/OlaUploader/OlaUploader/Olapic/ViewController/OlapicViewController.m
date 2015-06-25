@@ -50,12 +50,15 @@
 {
     self = [super init];
     if (self) {
-        // Set the API Key
-        NSString *APIKey = @"<YOUR API KEY>";
-        OlapicSDK *olapic = [OlapicSDK sharedOlapicSDK];
-        [olapic connectWithCustomerAuthKey:APIKey onSuccess:^(OlapicCustomerEntity *customer){
+        // Setup the OAuth client ID and secret key
+        NSString *clientID = @"YOUR_CLIENT_ID";
+        NSString *secretKey = @"YOUR_SECRET_KEY";
+        // Instantiate the OAuth handler
+        OlapicOAuthForSecretKey *oauth = [[OlapicOAuthForSecretKey alloc] initWithClientId:clientID andSecretKey:secretKey];
+        // Connect the SDK to our API using your OAuth method
+        [[OlapicSDK sharedOlapicSDK] connectWithOAuthMethod:oauth onSuccess:^(OlapicCustomerEntity *customer) {
             _customer = customer;
-        } onFailure:^(NSError *error){
+        } onFailure:^(NSError *error) {
             [self showAlert:[NSString stringWithFormat:@"Error trying to connect: %@", error] title:@"Error"];
         }];
     }
