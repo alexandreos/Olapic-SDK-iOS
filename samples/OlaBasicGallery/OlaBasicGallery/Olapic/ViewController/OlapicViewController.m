@@ -86,18 +86,20 @@
         // Show the loading indicator
         [self centerLoader];
         [loader startAnimating];
-        // Set the API Key
-        NSString *APIKey = @"<YOUR API KEY>";
-        // Connect the SDK
-        OlapicSDK *olapic = [OlapicSDK sharedOlapicSDK];
-        [olapic connectWithCustomerAuthKey:APIKey onSuccess:^(OlapicCustomerEntity *customer){
+        
+        // Setup the OAuth client ID and secret key
+        NSString *clientID = @"YOUR_CLIENT_ID";
+        NSString *secretKey = @"YOUR_SECRET_KEY";
+        // Instantiate the OAuth handler
+        OlapicOAuthForSecretKey *oauth = [[OlapicOAuthForSecretKey alloc] initWithClientId:clientID andSecretKey:secretKey];
+        // Connect the SDK to our API using your OAuth method
+        [[OlapicSDK sharedOlapicSDK] connectWithOAuthMethod:oauth onSuccess:^(OlapicCustomerEntity *customer) {
             list = [[OlapicCustomerMediaList alloc] initForCustomer:customer delegate:self sort:OlapicMediaListSortingTypePhotorank mediaPerPage:32];
             [list startFetching];
-        } onFailure:^(NSError *error){
+        } onFailure:^(NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:nil cancelButtonTitle:@"Accept" otherButtonTitles:nil];
             [alert show];
         }];
-        
     }
 }
 /**
