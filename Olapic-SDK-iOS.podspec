@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "https://github.com/Olapic/Olapic-SDK-iOS"
-  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -49,9 +48,7 @@ Pod::Spec.new do |s|
   #
 
   s.author             = { "Olapic" => "" }
-  # Or just: s.author    = "Olapic"
-  # s.authors            = { "Olapic" => "" }
-  # s.social_media_url   = "http://twitter.com/Olapic"
+  s.social_media_url   = "http://olapic.com"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -59,7 +56,6 @@ Pod::Spec.new do |s|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  # s.platform     = :ios
   s.platform     = :ios, "7.0"
 
   #  When using multiple platforms
