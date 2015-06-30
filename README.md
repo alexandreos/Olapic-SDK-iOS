@@ -53,11 +53,23 @@ This feature will provide the tools to retrieve UGC from specific users and disp
 
 ##Installation
 
-###Using CocoaPod
+###Installation: CocoaPods
 
-```
-pod 'Olapic-SDK-iOS', '~> 2.0'
-```
+A [CocoaPod](http://cocoapods.org/) has been added for convenient use in simple projects. There are a couple of things you should be aware of if you are using the CocoaPod instead of the standard method: 
+
+- There will be no actual files added to your project. Files are only added through `preserve_paths`, so they will be available in your `Pods/Olapic-SDK-iOS` path, but you will not see them in Xcode, and they will not be compiled by Xcode.
+- You will not be able to modify the scripts without those modifications being potentially overwritten by CocoaPods. 
+
+If those caveats are deal-breakers, please use the standard installation method above. 
+
+The steps to install via CocoaPods: 
+
+1. Add `pod 'Olapic-SDK-iOS', '~>2.0'` (or whatever [version specification](http://guides.cocoapods.org/using/the-podfile.html#specifying-pod-versions) you desire) to your Podfile. 
+2. Run `pod install`. This will download the necessary files.
+3. In your main target, add a Run Script build phase to execute
+`Pods/Olapic-SDK-iOS/exportenv.sh`. 
+
+Again, make sure you add the script to your main target (your app or library), not your test target.
 
 ###Authentication and Authorization:
 
