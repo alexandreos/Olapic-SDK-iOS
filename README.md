@@ -53,6 +53,12 @@ This feature will provide the tools to retrieve UGC from specific users and disp
 
 ##Installation
 
+###Using CocoaPod
+
+```
+pod 'Olapic-SDK-iOS', '~> 2.0'
+```
+
 ###Authentication and Authorization:
 
 The SDK uses OAuth to authenticate your account and provide access to our API. You'll need to open a ticket on our help desk in order to receive a **client ID** and a **secret key**
