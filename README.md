@@ -120,7 +120,7 @@ You can find the documentation on every class on [http://docs.photorank.me/ios/]
 
 Once the SDK is installed and ready to go, start using it from any of your implementation files by adding the Olapic SDK header file. To import headers include the following line to your code:
 
-`#import Ã¢â‚¬Å“OlapicSDK.hÃ¢â‚¬Â`
+`#import <OlapicSDK.h>`
 
 ##License	
 
