@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "Olapic-SDK-iOS"
-  s.version      = "2.0.1"
+  s.version      = "2.0.3"
   s.summary      = "The SDK makes it easier for iOS developers to build applications."
 
   s.description  = <<-DESC
