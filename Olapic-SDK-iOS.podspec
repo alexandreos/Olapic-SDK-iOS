@@ -83,8 +83,9 @@ Pod::Spec.new do |s|
   s.source_files  = "dist/OlapicSDK.framework/**/*.h"
   s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "Classes/**/*.h"
-
+  s.preserve_paths = "dist/OlapicSDK.framework"
+  s.public_header_files = "dist/OlapicSDK.framework/**/*.h"
+  s.vendored_frameworks = "dist/OlapicSDK.framework"
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
